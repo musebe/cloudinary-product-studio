@@ -26,8 +26,8 @@
 
 **Code notes:** New isolated project in `Desktop/Articles/cloudinary-product-studio`; no live deployment or repository URL exists yet. Public examples, local decisions, and provider-verified results must remain distinguishable.
 
-| Primary keyword | Secondary keywords | Long-tail keywords | Meta title | Meta description |
-| --- | --- | --- | --- | --- |
+| Primary keyword              | Secondary keywords                                 | Long-tail keywords                                    | Meta title                                           | Meta description                                                                                                                                  |
+| ---------------------------- | -------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | consistent AI product images | Vue Cloudinary; reference images; scene variations | keep product details consistent across AI backgrounds | Consistent AI Product Images With Vue and Cloudinary | Anchor image variations to a product reference with Vue and Cloudinary, compare the results, and review product details before accepting a scene. |
 
 **Reader intent:** Implement controlled product-image variation, not an automatic guarantee of identity or legal compliance.

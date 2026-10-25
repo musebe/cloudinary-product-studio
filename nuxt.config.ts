@@ -1,5 +1,35 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
-  devtools: { enabled: true }
+  compatibilityDate: '2026-10-25',
+  buildDir: process.env.PRODUCT_STUDIO_BUILD_DIR,
+  devtools: { enabled: false },
+  build: { transpile: ['@cloudinary/vue', '@cloudinary/html'] },
+  css: ['~/assets/main.css'],
+  devServer: { host: '127.0.0.1', port: 3004 },
+  runtimeConfig: {
+    cloudinaryCloudName: '',
+    cloudinaryApiKey: '',
+    cloudinaryApiSecret: '',
+    demoSessionSecret: '',
+    enableLiveUploads: false,
+    enableGeneration: false,
+  },
+  app: {
+    head: {
+      htmlAttrs: { lang: 'en' },
+      title: 'Product Studio | Vue and Cloudinary',
+      meta: [
+        {
+          name: 'description',
+          content:
+            'Anchor image variations to a product reference. Compare a saved Cloudinary example, plan a scene, and review the details that matter.',
+        },
+      ],
+      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/icon.svg' }],
+    },
+  },
+  routeRules: {
+    '/api/**': {
+      headers: { 'Cache-Control': 'private, no-store', 'X-Content-Type-Options': 'nosniff' },
+    },
+  },
 })

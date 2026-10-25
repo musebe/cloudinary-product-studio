@@ -39,6 +39,8 @@ Cloudinary generative background replacement is documented as Beta, can be inacc
 
 Reference-guided Image Generation is a distinct API with model/add-on requirements. If the implementation selects it, record the actual model, reference inputs, settings, quota, and results. Do not label an Image Generation example as background replacement.
 
+The first scene-plan implementation selects reference-guided Image Generation with the explicit `flux-2-klein-9b-edit` model. This is a planned operation only; account support, actual pricing/quota, and a bounded first test remain unverified. Generative background replacement is an alternative, not the operation demonstrated by the saved watercolor example.
+
 A fixed seed helps reproduce a request; it does not guarantee product identity or protect text. Technical provenance and human visual judgments are separate evidence. Browser reviews are attestations, not legal clearance or production authorization.
 
 ## Documentation and verification

@@ -1,0 +1,11 @@
+node_modules
+.nuxt
+.output
+.nuxt-test
+.nuxt-e2e
+.output-test
+.test-artifacts
+playwright-report
+test-results
+pnpm-lock.yaml
+public/demo
