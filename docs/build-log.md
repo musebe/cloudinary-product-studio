@@ -49,3 +49,15 @@ The add-on reported 50 credits before this run and 44 remaining afterward. These
 The images change the setting as requested, but product details still need human inspection. In particular, compare the dot pattern, handle shape, proportions, and surface finish; a reference image does not guarantee exact product identity. No visual pass score or approval was assigned automatically.
 
 An initial Node import-resolution error occurred before the script reached any provider operation. Explicit TypeScript import extensions fixed it. The two-request ledger was created only by the subsequent successful run.
+
+## October 25, 2026: saved-only public experience
+
+The home page now defaults to Quiet marble and offers exactly two saved scene choices. The documentation watercolor is no longer an active result. Selecting either scene loads its packaged PNG without a provider request, and the comparison shows the selected output's actual generation inputs and verification evidence.
+
+Reviews and evidence downloads are bound to the selected saved asset and its SHA-256. Switching images clears the previous decision; remote Cloudinary delivery still disables review until the hash-checked packaged copy is selected. The public generation endpoint returns HTTP 403 regardless of reserved environment flags. The operator authoring script is never called by application routes, install hooks, build hooks, or page loading.
+
+Verification: 221 unit/component checks and 12 desktop/mobile browser checks pass. Formatting, linting, type checking, and the production build pass. Browser tests intercept remote delivery and prove initial loading and scene switching do not issue external generation requests. Both full-page desktop and mobile layouts were visually inspected. Node's native JSON loader required an explicit `with { type: 'json' }` import attribute for the browser test runner; no provider call was involved in that test-runner fix.
+
+A production-server smoke test runs without Cloudinary credentials: both packaged generated images return HTTP 200 with matching hashes, scene switching works, and the public generation endpoint returns HTTP 403. No external browser request is required. The client bundle was scanned against the local secret values and contained none.
+
+Remaining optional work from the original broad plan is outside the current saved-demo scope: user-upload ingestion, a general-purpose live editor, durable server-side human approvals, and a larger independent consistency benchmark. The article has not been written yet.

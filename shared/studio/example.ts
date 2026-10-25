@@ -1,4 +1,5 @@
 export interface ExampleAsset {
+  readonly cloudName?: string
   readonly id: string
   readonly publicId: string
   readonly version: number

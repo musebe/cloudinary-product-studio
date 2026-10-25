@@ -8,7 +8,7 @@
 
 **Opportunity score:** Not yet scored. Review existing Cloudinary coverage before making an originality claim.
 
-**Buildability score:** Not yet scored. The UI foundation is in progress; live editing needs verified account capability and a bounded budget.
+**Buildability score:** Not yet scored. Two reference-guided edits were generated, saved, and verified; the public demo replays them without generating more images.
 
 **Objective:** Teach reference-led product-image editing with controlled scene variations and visible consistency review.
 
@@ -18,7 +18,7 @@
 
 **Question:** How can I change a product image's setting without silently accepting changes to the product?
 
-**Proof / GEO asset:** Planned reference-to-output evidence table, bounded scene recipes, and a documented product-consistency checklist. No accuracy measurement is available yet.
+**Proof / GEO asset:** Two saved 1024 × 1024 outputs, exact generation inputs, authenticated asset readback, delivered-file hashes, and a product-consistency checklist. The verified run used 6 Image Generation credits total. No automatic visual-accuracy measurement or identity guarantee is claimed.
 
 **Outline:** Direct answer; demo; source reference; controlled requests; Cloudinary editing; stored output verification; comparison; human review; measured findings; limitations; conclusion; FAQs.
 
@@ -32,6 +32,6 @@
 
 **Reader intent:** Implement controlled product-image variation, not an automatic guarantee of identity or legal compliance.
 
-**Publication gate:** Not scored. Blockers: live proof, source overlap review, recorded evidence, and final article are pending. No publication-ready claim.
+**Publication gate:** Not scored. Saved generation evidence exists; final source overlap review and the article remain pending. No publication-ready claim.
 
 **Review and design messages:** Add after the implemented demo and article have been verified. Keep the final handoff within one or two pages.

@@ -1,31 +1,35 @@
 <script setup lang="ts">
-import { computed, onMounted, shallowRef } from 'vue'
+import { computed, onMounted, shallowRef, watch } from 'vue'
 import { Box, ArrowUpRight, Check, Sparkles } from '@lucide/vue'
-import { createScenePlan, type SceneId } from '#shared/studio/contracts'
-import { exampleIdentity } from '#shared/studio/example'
+import { getSavedOutput, savedReference, type SavedSceneId } from '#shared/studio/saved-data'
 import { useCandidateReview } from './composables/useCandidateReview'
 import { downloadEvidence } from './utils/downloadEvidence'
 import ReferencePanel from './components/ReferencePanel.vue'
 import ScenePicker from './components/ScenePicker.vue'
 import ProductComparison from './components/ProductComparison.vue'
 import ConsistencyReview from './components/ConsistencyReview.vue'
-import ScenePlan from './components/ScenePlan.vue'
 
-const selectedScene = shallowRef<SceneId>('marble')
+const selectedScene = shallowRef<SavedSceneId>('marble')
 const cloudinaryDelivery = shallowRef(false)
 const hydrated = shallowRef(false)
 onMounted(() => {
   hydrated.value = true
 })
-const plan = shallowRef<ReturnType<typeof createScenePlan> | null>(null)
-const mode = shallowRef<'compare' | 'plan'>('compare')
-const identity = computed(() => exampleIdentity)
+const candidate = computed(() => getSavedOutput(selectedScene.value))
+const identity = computed(() => ({
+  referenceId: savedReference.id,
+  candidateId: candidate.value.id,
+  candidateSha256: candidate.value.sha256,
+}))
 const { checks, review, setCheck, decide, reset } = useCandidateReview(identity)
 
-function preview() {
-  plan.value = createScenePlan({ sceneId: selectedScene.value })
-  mode.value = 'plan'
-}
+watch(
+  selectedScene,
+  () => {
+    cloudinaryDelivery.value = false
+  },
+  { flush: 'sync' },
+)
 
 function changeDelivery(remote: boolean) {
   cloudinaryDelivery.value = remote
@@ -33,7 +37,7 @@ function changeDelivery(remote: boolean) {
 }
 
 function download() {
-  if (!cloudinaryDelivery.value) downloadEvidence(review.value)
+  if (!cloudinaryDelivery.value) downloadEvidence(candidate.value, review.value)
 }
 </script>
 
@@ -46,7 +50,7 @@ function download() {
         ><span><strong>Product Studio</strong><span>Cloudinary × Vue</span></span></a
       >
       <div class="header-meta">
-        <span class="status-dot" aria-hidden="true"></span>Saved demo · no generation cost
+        <span class="status-dot" aria-hidden="true"></span>2 saved scenes · no new generation
       </div>
     </header>
     <main>
@@ -74,38 +78,19 @@ function download() {
         <legend class="sr-only">Interactive product studio</legend>
         <section id="studio" class="studio-layout" aria-label="Interactive product studio">
           <aside class="control-panel">
-            <ReferencePanel /><ScenePicker
-              v-model="selectedScene"
-              :pending="false"
-              @preview="preview"
-            />
+            <ReferencePanel /><ScenePicker v-model="selectedScene" />
           </aside>
           <div class="result-panel">
-            <div class="result-tabs" role="group" aria-label="Studio view">
-              <button
-                id="compare-tab"
-                class="view-tab"
-                type="button"
-                :aria-pressed="mode === 'compare'"
-                aria-controls="compare-panel"
-                @click="mode = 'compare'"
-              >
-                Saved comparison</button
-              ><button
-                id="plan-tab"
-                class="view-tab"
-                type="button"
-                :aria-pressed="mode === 'plan'"
-                aria-controls="plan-panel"
-                @click="plan ? (mode = 'plan') : preview()"
-              >
-                Scene plan</button
-              ><span class="tab-note"
-                ><Check :size="13" aria-hidden="true" />No API key needed</span
-              >
+            <div class="result-tabs" aria-label="Saved result">
+              <p class="saved-result-label">Saved comparison · {{ candidate.name }}</p>
+              <span class="tab-note"><Check :size="13" aria-hidden="true" />No API key needed</span>
             </div>
-            <div v-show="mode === 'compare'" id="compare-panel" aria-labelledby="compare-tab">
-              <ProductComparison @delivery-change="changeDelivery" /><ConsistencyReview
+            <div id="compare-panel">
+              <ProductComparison
+                :key="candidate.id"
+                :candidate="candidate"
+                @delivery-change="changeDelivery"
+              /><ConsistencyReview
                 :checks="checks"
                 :review="review"
                 :available="!cloudinaryDelivery"
@@ -113,12 +98,6 @@ function download() {
                 @decide="decide"
                 @reset="reset"
                 @download="download"
-              />
-            </div>
-            <div v-if="mode === 'plan'" id="plan-panel" aria-labelledby="plan-tab">
-              <ScenePlan
-                :plan="plan ?? createScenePlan({ sceneId: selectedScene })"
-                @compare="mode = 'compare'"
               />
             </div>
           </div>

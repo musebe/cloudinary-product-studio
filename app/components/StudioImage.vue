@@ -10,7 +10,10 @@ const { asset, cloudinaryDelivery = false } = defineProps<{
 }>()
 const failed = shallowRef(false)
 const image = computed(() =>
-  new Cloudinary({ cloud: { cloudName: 'demo' }, url: { secure: true, analytics: false } })
+  new Cloudinary({
+    cloud: { cloudName: asset.cloudName ?? 'demo' },
+    url: { secure: true, analytics: false },
+  })
     .image(`${asset.publicId}.${asset.format}`)
     .setVersion(asset.version),
 )

@@ -1,6 +1,12 @@
 import { readFile } from 'node:fs/promises'
 import { expect, test } from '@playwright/test'
-import { candidateAsset, referenceAsset } from '../../shared/studio/example'
+import {
+  savedOutputs,
+  savedReference as referenceAsset,
+  storedOutputUrl,
+} from '../../shared/studio/saved-data'
+
+const candidateAsset = savedOutputs[0]!
 
 test('loads a working saved comparison without external requests', async ({ page }) => {
   const externalRequests: string[] = []
@@ -62,7 +68,10 @@ test('binds a local review to the example, invalidates edits, and clears on relo
     decision: 'approved',
     checks: { shape: true, color: true, details: true },
   })
-  expect(evidence.provenance.origin).toBe('published-cloudinary-documentation')
+  expect(evidence.provenance.origin).toBe('generated-for-this-project')
+  expect(evidence.schemaVersion).toBe('product-studio.saved-review.v1')
+  expect(evidence.candidate.verification.adminReadback).toBe(true)
+  expect(evidence.candidate.generation.modelUsed).toBe('flux-2-klein-9b-edit')
   expect(evidence).not.toHaveProperty('score')
   await page.getByRole('checkbox', { name: 'Product color' }).uncheck()
   await expect(page.getByRole('status')).toHaveText('Not reviewed')
@@ -72,7 +81,7 @@ test('binds a local review to the example, invalidates edits, and clears on relo
   await expect(page.getByRole('status')).toHaveText('Not reviewed')
 })
 
-test('previews a bounded scene request without generating or relabeling the sample', async ({
+test('switches between exactly two saved scenes without generating or inheriting a review', async ({
   page,
 }) => {
   const requests: string[] = []
@@ -80,20 +89,32 @@ test('previews a bounded scene request without generating or relabeling the samp
     if (request.method() === 'POST') requests.push(request.url())
   })
   await page.goto('/')
-  await page.getByRole('radio', { name: 'Warm studio' }).check()
-  await page.getByRole('button', { name: 'Preview scene request' }).click()
-  await expect(page.getByRole('heading', { name: 'Warm studio', exact: true })).toBeVisible()
-  await expect(page.getByText('Not generated', { exact: true })).toBeVisible()
-  await expect(page.getByText('flux-2-klein-9b-edit', { exact: true })).toBeVisible()
-  await expect(page.locator('.request-box')).toContainText('reference image [1]')
-  await expect(page.locator('.plan-facts')).toContainText('Provider calls0')
-  await expect(page.getByRole('button', { name: 'Accept candidate' })).toBeHidden()
-  await page.getByRole('button', { name: 'Back to saved comparison' }).click()
-  await expect(page.getByText('Reference-guided watercolor, not a new scene.')).toBeVisible()
-  await expect(page.getByRole('button', { name: 'Saved comparison', exact: true })).toHaveAttribute(
-    'aria-pressed',
-    'true',
+  await expect(page.getByRole('radio')).toHaveCount(2)
+  await expect(page.locator('.image-pair img').nth(1)).toHaveAttribute(
+    'src',
+    '/demo/generated/marble.png',
   )
+  await page.getByRole('checkbox', { name: 'Shape and proportions' }).check()
+  await page.getByRole('button', { name: 'Needs changes', exact: true }).click()
+  await expect(page.getByRole('status')).toHaveText('Changes needed')
+  await page.getByRole('radio', { name: 'Botanical light' }).check()
+  await expect(page.locator('.image-pair img').nth(1)).toHaveAttribute(
+    'src',
+    '/demo/generated/botanical.png',
+  )
+  await expect(page.getByRole('checkbox', { name: 'Shape and proportions' })).not.toBeChecked()
+  await expect(page.getByRole('status')).toHaveText('Not reviewed')
+  await page.getByRole('button', { name: 'Needs changes', exact: true }).click()
+  const downloadPromise = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Download evidence' }).click()
+  const download = await downloadPromise
+  const evidence = JSON.parse(await readFile((await download.path())!, 'utf8'))
+  expect(evidence.candidate.id).toBe(savedOutputs[1]!.id)
+  expect(evidence.review.candidateSha256).toBe(savedOutputs[1]!.sha256)
+  expect(evidence.review.decision).toBe('rejected')
+  await page.getByRole('radio', { name: 'Quiet marble' }).check()
+  await expect(page.getByRole('status')).toHaveText('Not reviewed')
+  await expect(page.getByRole('button', { name: 'Accept candidate' })).toBeDisabled()
   expect(requests).toEqual([])
 })
 
@@ -103,16 +124,17 @@ test('supports keyboard controls, enlarged comparison, and narrow screens', asyn
   await expect(marble).toBeEnabled()
   await marble.focus()
   await page.keyboard.press('ArrowDown')
-  await expect(page.getByRole('radio', { name: 'Warm studio' })).toBeChecked()
+  await expect(page.getByRole('radio', { name: 'Botanical light' })).toBeChecked()
   await page.getByRole('button', { name: 'Enlarge image comparison' }).click()
   await expect(page.getByRole('button', { name: 'Enlarge image comparison' })).toHaveAttribute(
     'aria-pressed',
     'true',
   )
   await expect(page.locator('.image-pair')).toHaveClass(/enlarged/)
-  await page.getByRole('button', { name: 'Scene plan', exact: true }).focus()
-  await page.keyboard.press('Enter')
-  await expect(page.getByRole('heading', { name: 'Warm studio', exact: true })).toBeVisible()
+  await expect(page.locator('.image-pair img').nth(1)).toHaveAttribute(
+    'src',
+    '/demo/generated/botanical.png',
+  )
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 })
     expect(
@@ -135,10 +157,12 @@ test('Cloudinary Vue delivery uses only stored example URLs and falls back on fa
   await expect(page.getByRole('button', { name: 'Download evidence' })).toBeDisabled()
   await expect(page.getByRole('button', { name: 'Needs changes', exact: true })).toBeDisabled()
   await expect(page.getByText('Saved files required', { exact: true })).toBeVisible()
-  expect(deliveryRequests.sort()).toEqual([
-    'https://res.cloudinary.com/demo/image/upload/v1784151459/docs/teapot-product.jpg',
-    'https://res.cloudinary.com/demo/image/upload/v1790152537/teapot-product/watercolor.png',
-  ])
+  expect(deliveryRequests.sort()).toEqual(
+    [
+      'https://res.cloudinary.com/demo/image/upload/v1784151459/docs/teapot-product.jpg',
+      storedOutputUrl(candidateAsset),
+    ].sort(),
+  )
   for (const image of await page.locator('.image-pair img').all()) {
     await expect
       .poll(() =>
@@ -157,12 +181,15 @@ test('health is truthful and generation is fail-closed', async ({ request }) => 
   expect(health.headers()['cache-control']).toBe('private, no-store')
   expect(await health.json()).toMatchObject({
     status: 'ok',
+    mode: 'saved-generated-scenes',
+    savedExamples: 2,
+    generationRequestsInSavedRun: 2,
     cloudinary: { credentialsVerified: false },
     capabilities: { liveGeneration: false, liveUpload: false, savedComparison: true },
     providerCalls: 0,
   })
   const generation = await request.post('/api/generate', { data: { sceneId: 'marble' } })
-  expect(generation.status()).toBe(501)
+  expect(generation.status()).toBe(403)
   expect(generation.headers()['content-type']).toContain('application/json')
   expect((await generation.json()).statusMessage).toContain('No provider call was made')
 })

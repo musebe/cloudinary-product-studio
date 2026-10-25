@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { ArrowUpRight, Expand, Info, Image as ImageIcon } from '@lucide/vue'
 import { shallowRef, watch } from 'vue'
-import { candidateAsset, exampleProvenance, referenceAsset } from '#shared/studio/example'
+import {
+  savedReference as referenceAsset,
+  savedDemo,
+  storedOutputUrl,
+  type SavedOutput,
+} from '#shared/studio/saved-data'
 import StudioImage from './StudioImage.vue'
+
+const { candidate: candidateAsset } = defineProps<{ candidate: Readonly<SavedOutput> }>()
 
 const cloudinaryDelivery = shallowRef(false)
 const expanded = shallowRef(false)
@@ -15,7 +22,9 @@ watch(cloudinaryDelivery, (remote) => emit('deliveryChange', remote), { flush: '
     <div class="comparison-top">
       <div>
         <h2 id="comparison-heading" class="panel-title">Look closer before you accept.</h2>
-        <p class="muted small">One reference. A result worth inspecting.</p>
+        <p class="muted small">
+          One reference. {{ candidateAsset.name }}. Generated once, saved for this demo.
+        </p>
       </div>
       <button
         class="icon-button"
@@ -40,21 +49,24 @@ watch(cloudinaryDelivery, (remote) => emit('deliveryChange', remote), { flush: '
       </figure>
       <figure class="image-card">
         <div class="image-card-heading">
-          <span><ImageIcon :size="14" aria-hidden="true" />Saved AI example</span
-          ><span class="badge amber">Restyled</span>
+          <span><ImageIcon :size="14" aria-hidden="true" />Saved AI scene</span
+          ><span class="badge neutral">{{ candidateAsset.name }}</span>
         </div>
         <div class="image-frame">
           <StudioImage :asset="candidateAsset" :cloudinary-delivery="cloudinaryDelivery" />
         </div>
-        <figcaption class="image-caption">Reference-guided watercolor, not a new scene.</figcaption>
+        <figcaption class="image-caption">
+          {{ candidateAsset.name }} · {{ candidateAsset.width }} × {{ candidateAsset.height }} ·
+          saved PNG
+        </figcaption>
       </figure>
     </div>
     <div class="example-callout">
       <Info :size="17" aria-hidden="true" />
       <p>
-        A reference can guide an image without preserving every detail. This published Cloudinary
-        example changes the style; inspect it against the product-photo brief rather than assuming
-        it passes.
+        These scenes were generated once with Cloudinary and saved. Switching scenes never starts
+        another generation. Compare the dot pattern, handle, color, and finish before accepting a
+        result.
       </p>
     </div>
     <div class="delivery-choice">
@@ -66,13 +78,26 @@ watch(cloudinaryDelivery, (remote) => emit('deliveryChange', remote), { flush: '
       }}</span>
     </div>
     <details class="provenance">
-      <summary>Example provenance &amp; request</summary>
+      <summary>Generation provenance &amp; request</summary>
       <p class="muted small">
-        {{ exampleProvenance.verification }} Downloaded {{ exampleProvenance.recordedOn }}. These
-        are Cloudinary documentation examples, not generations from your account.
+        Generated for this project and saved {{ savedDemo.recordedOn }}. Cloudinary Admin API
+        readback, delivery dimensions, byte counts, and file hashes were checked. This verifies the
+        saved asset, not visual product consistency.
       </p>
-      <p class="request-note">{{ exampleProvenance.prompt }}</p>
+      <p class="request-note">{{ candidateAsset.generation.prompt }}</p>
       <dl class="evidence-facts">
+        <div>
+          <dt>Actual model</dt>
+          <dd>{{ candidateAsset.generation.modelUsed }}</dd>
+        </div>
+        <div>
+          <dt>Seed used</dt>
+          <dd>{{ candidateAsset.generation.seedUsed ?? 'Not provided by model' }}</dd>
+        </div>
+        <div>
+          <dt>Cloudinary asset ID</dt>
+          <dd>{{ candidateAsset.assetId }}</dd>
+        </div>
         <div>
           <dt>Reference SHA-256</dt>
           <dd>{{ referenceAsset.sha256 }}</dd>
@@ -82,8 +107,8 @@ watch(cloudinaryDelivery, (remote) => emit('deliveryChange', remote), { flush: '
           <dd>{{ candidateAsset.sha256 }}</dd>
         </div>
       </dl>
-      <a class="text-link" :href="exampleProvenance.source" target="_blank" rel="noreferrer"
-        >Published source <ArrowUpRight :size="14" aria-hidden="true"
+      <a class="text-link" :href="storedOutputUrl(candidateAsset)" target="_blank" rel="noreferrer"
+        >Open saved Cloudinary image <ArrowUpRight :size="14" aria-hidden="true"
       /></a>
     </details>
   </section>

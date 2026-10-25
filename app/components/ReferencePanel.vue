@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { LockKeyhole, ArrowUpRight } from '@lucide/vue'
-import { referenceAsset } from '#shared/studio/example'
+import { savedReference as referenceAsset } from '#shared/studio/saved-data'
 import StudioImage from './StudioImage.vue'
 </script>
 
@@ -39,7 +39,7 @@ import StudioImage from './StudioImage.vue'
       rel="noreferrer"
       >See the original example <ArrowUpRight :size="14" aria-hidden="true"
     /></a>
-    <p class="note">Your own product upload comes next. This sample needs no API keys.</p>
+    <p class="note">Both saved scenes use this reference. Browsing the demo needs no API keys.</p>
   </section>
 </template>
 

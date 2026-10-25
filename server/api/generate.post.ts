@@ -1,7 +1,7 @@
 export default defineEventHandler(() => {
   throw createError({
-    statusCode: 501,
+    statusCode: 403,
     statusMessage:
-      'Live generation is not connected. Use the saved comparison or preview a scene request. No provider call was made.',
+      'Public generation is disabled. This demo serves two saved outputs. No provider call was made.',
   })
 })

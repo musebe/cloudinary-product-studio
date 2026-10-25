@@ -1,22 +1,20 @@
 <script setup lang="ts">
-import { ArrowRight, CircleCheck } from '@lucide/vue'
-import { scenePresets, type SceneId } from '#shared/studio/contracts'
+import { CircleCheck } from '@lucide/vue'
+import { savedScenes, type SavedSceneId } from '#shared/studio/saved-data'
 
-const selected = defineModel<SceneId>({ required: true })
-defineProps<{ pending: boolean }>()
-const emit = defineEmits<{ preview: [] }>()
+const selected = defineModel<SavedSceneId>({ required: true })
 </script>
 
 <template>
   <section class="scene-panel" aria-labelledby="scene-heading">
     <div class="section-label">
-      <span>02 / Scene direction</span><span class="muted">3 presets</span>
+      <span>02 / Saved scenes</span><span class="muted">2 outputs</span>
     </div>
     <h2 id="scene-heading" class="panel-title">Change the setting.</h2>
     <fieldset class="scene-options">
       <legend class="sr-only">Choose a scene preset</legend>
       <label
-        v-for="scene in scenePresets"
+        v-for="scene in savedScenes"
         :key="scene.id"
         class="scene-option"
         :class="{ selected: selected === scene.id }"
@@ -39,16 +37,10 @@ const emit = defineEmits<{ preview: [] }>()
         />
       </label>
     </fieldset>
-    <button
-      class="button primary full-width"
-      type="button"
-      :disabled="pending"
-      @click="emit('preview')"
-    >
-      {{ pending ? 'Preparing plan…' : 'Preview scene request'
-      }}<ArrowRight :size="16" aria-hidden="true" />
-    </button>
-    <p class="note">Preview builds a request, not an image. Generation is off.</p>
+    <p class="note">
+      Generated once with Cloudinary. Choose a scene to load its saved result, without generating
+      another image.
+    </p>
   </section>
 </template>
 

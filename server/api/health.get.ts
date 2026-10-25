@@ -1,9 +1,13 @@
+import { savedOutputs } from '#shared/studio/saved-data'
+
 export default defineEventHandler((event) => {
   const config = useRuntimeConfig(event)
   return {
     status: 'ok',
     application: 'cloudinary-product-studio',
-    mode: 'saved-example-and-scene-planning',
+    mode: 'saved-generated-scenes',
+    savedExamples: savedOutputs.length,
+    generationRequestsInSavedRun: 2,
     cloudinary: {
       credentialsSupplied: Boolean(
         config.cloudinaryCloudName && config.cloudinaryApiKey && config.cloudinaryApiSecret,
@@ -12,7 +16,7 @@ export default defineEventHandler((event) => {
     },
     capabilities: {
       savedComparison: true,
-      scenePlanning: true,
+      scenePlanning: false,
       localReview: true,
       liveUpload: false,
       liveGeneration: false,

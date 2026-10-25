@@ -199,6 +199,13 @@ h1 {
   padding: 0 1.35rem;
   gap: 1.25rem;
 }
+.saved-result-label {
+  margin: 0;
+  padding: 1.1rem 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
 .view-tab {
   background: none;
   border: 0;
