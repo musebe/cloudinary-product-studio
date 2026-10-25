@@ -4,12 +4,18 @@ A focused Vue and Cloudinary demo for reference-led product imagery. Compare a p
 
 The two scenes were generated once with Cloudinary, verified through the Admin API, and included in this project. Visitors switch between saved images; they cannot trigger generation charges. Reviews stay local to the page.
 
+[Source code](https://github.com/musebe/cloudinary-product-studio)
+
+Built with Nuxt 4, Vue 3, TypeScript, and the Cloudinary Vue SDK. The public demo does not need a database or Cloudinary credentials.
+
 ## Run locally
 
 Use Node.js 24 and pnpm 10:
 
 ```bash
-pnpm install
+git clone https://github.com/musebe/cloudinary-product-studio.git
+cd cloudinary-product-studio
+pnpm install --frozen-lockfile
 cp .env.example .env.local
 pnpm dev
 ```
@@ -17,6 +23,26 @@ pnpm dev
 Open [Product Studio](http://localhost:3004). If `.env.local` already exists, keep it instead of copying the template over it.
 
 The saved demo needs no credentials. The reference and both generated images are included in `public/demo`, so the first load does not contact Cloudinary or generate an image.
+
+## Deploy the saved demo
+
+Import this repository into Vercel using these settings:
+
+| Setting               | Value                            |
+| --------------------- | -------------------------------- |
+| Framework             | Nuxt.js                          |
+| Root directory        | Repository root                  |
+| Node.js               | 24.x                             |
+| Install command       | `pnpm install --frozen-lockfile` |
+| Build command         | `pnpm build`                     |
+| Output directory      | Use the framework default        |
+| Environment variables | None required for the saved demo |
+
+Do not upload `.env.local`, the private `.data` ledger, or Cloudinary API secrets to Vercel. The committed `vercel.json` configures the framework and commands; `.vercelignore` excludes local credentials and artifacts from CLI uploads. Generation remains blocked on the public API even if a reserved flag is changed.
+
+After deployment, `/api/health` should return `status: "ok"`, `savedExamples: 2`, and `capabilities.liveGeneration: false`. `credentialsSupplied: false` is expected for this saved-only deployment. Check both scene selections, evidence downloads, and the mobile layout. `POST /api/generate` must return HTTP 403.
+
+Vercel supports Nuxt's server-rendered build with [framework defaults](https://vercel.com/docs/frameworks/full-stack/nuxt). Do not replace `pnpm build` with a static-only export or set the output directory to `.output/public`, because this project includes API routes.
 
 ## Try the demo
 
@@ -105,4 +131,4 @@ docs/                      Build brief, verified build log, and article handoff
 
 The reference photograph comes from [Cloudinary's Image Generation documentation](https://cloudinary.com/documentation/image_generation_addon#generate_an_image_from_reference_images). The two active scenes were generated for this project, not copied from the documentation. Their original URLs, actual model, prompts, seeds, dimensions, byte counts, verification times, and SHA-256 hashes are recorded in the saved manifest and checked by tests. The earlier watercolor fixture is retained only as a historical documentation example and is not an active demo result. Use your own authorized product assets for a real catalog.
 
-See the [build brief](docs/build-brief.md) for the remaining checkpoints and [build log](docs/build-log.md) for verified progress.
+See the [build brief](docs/build-brief.md) for scope and optional future work, and the [build log](docs/build-log.md) for verified progress.

@@ -11,6 +11,7 @@ export default ts.config(
       '.nuxt/**',
       '.nuxt-e2e/**',
       '.output/**',
+      '.vercel/**',
       '.test-artifacts/**',
       'test-results/**',
       'playwright-report/**',

@@ -1,6 +1,7 @@
 node_modules
 .nuxt
 .output
+.vercel
 .nuxt-test
 .nuxt-e2e
 .output-test

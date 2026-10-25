@@ -21,7 +21,7 @@ export default defineNuxtConfig({
         {
           name: 'description',
           content:
-            'Anchor image variations to a product reference. Compare a saved Cloudinary example, plan a scene, and review the details that matter.',
+            'Compare two saved Cloudinary-generated product scenes with their reference. Inspect shape, color, and details without generating another image.',
         },
       ],
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/icon.svg' }],
