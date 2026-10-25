@@ -61,3 +61,18 @@ Verification: 221 unit/component checks and 12 desktop/mobile browser checks pas
 A production-server smoke test runs without Cloudinary credentials: both packaged generated images return HTTP 200 with matching hashes, scene switching works, and the public generation endpoint returns HTTP 403. No external browser request is required. The client bundle was scanned against the local secret values and contained none.
 
 Remaining optional work from the original broad plan is outside the current saved-demo scope: user-upload ingestion, a general-purpose live editor, durable server-side human approvals, and a larger independent consistency benchmark. The article has not been written yet.
+
+## October 25, 2026: GitHub and Vercel release
+
+Updated the README first with local setup, saved-demo behavior, review limitations, and deployment settings. Commit `5912b0b` was pushed to the new public [GitHub repository](https://github.com/musebe/cloudinary-product-studio), then deployed to [Product Studio on Vercel](https://cloudinary-product-studio.vercel.app/). The Vercel project is connected to the repository for subsequent pushes. The build uses Nuxt's Vercel preset and Node.js 24.
+
+No Cloudinary credentials were added to Vercel. CLI upload verification confirmed that `.env.local`, the private authoring ledger, and local build/test artifacts were excluded. Install and build did not run the authoring script or request any new generation.
+
+Release verification:
+
+- Formatting, linting, type checking, 221 unit/component tests, and the production build pass. A standalone browser rerun passes all 12 desktop/mobile checks after two navigation timeouts during concurrent local checks.
+- Anonymous requests to the public production domain return HTTP 200 for the home page, health endpoint, source image, and both generated images. The three delivered image byte counts and SHA-256 hashes match the committed manifest.
+- Health reports two saved examples, no supplied Cloudinary credentials, and live generation disabled. `POST /api/generate` returns HTTP 403 with a JSON response.
+- Browser checks against the public production domain pass on desktop and mobile: default marble image, botanical selection, review invalidation, candidate-bound evidence download, and layout widths from 320 to 1,440 pixels. No external browser requests, POST requests, or uncaught page errors occur during saved-demo interaction.
+
+Deployment is complete for the saved-demo scope. Article drafting, current-source review, and editorial/design handoff messages are the next checkpoint; no article publication-readiness claim is made here.

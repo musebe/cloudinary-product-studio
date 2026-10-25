@@ -24,7 +24,7 @@
 
 **Research and notes:** Use official Cloudinary and Vue documentation. Image Generation and generative background replacement are different capabilities. Seeds and reference inputs do not guarantee identity preservation.
 
-**Code notes:** New isolated project in `Desktop/Articles/cloudinary-product-studio`; no live deployment or repository URL exists yet. Public examples, local decisions, and provider-verified results must remain distinguishable.
+**Code notes:** Isolated project in `Desktop/Articles/cloudinary-product-studio`. [Live demo](https://cloudinary-product-studio.vercel.app/) · [GitHub repository](https://github.com/musebe/cloudinary-product-studio). The saved-only deployment needs no Cloudinary credentials. Public examples, local decisions, and provider-verified results must remain distinguishable.
 
 | Primary keyword              | Secondary keywords                                 | Long-tail keywords                                    | Meta title                                           | Meta description                                                                                                                                  |
 | ---------------------------- | -------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |

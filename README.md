@@ -4,7 +4,7 @@ A focused Vue and Cloudinary demo for reference-led product imagery. Compare a p
 
 The two scenes were generated once with Cloudinary, verified through the Admin API, and included in this project. Visitors switch between saved images; they cannot trigger generation charges. Reviews stay local to the page.
 
-[Source code](https://github.com/musebe/cloudinary-product-studio)
+[Live demo](https://cloudinary-product-studio.vercel.app/) · [Source code](https://github.com/musebe/cloudinary-product-studio)
 
 Built with Nuxt 4, Vue 3, TypeScript, and the Cloudinary Vue SDK. The public demo does not need a database or Cloudinary credentials.
 
@@ -41,6 +41,8 @@ Import this repository into Vercel using these settings:
 Do not upload `.env.local`, the private `.data` ledger, or Cloudinary API secrets to Vercel. The committed `vercel.json` configures the framework and commands; `.vercelignore` excludes local credentials and artifacts from CLI uploads. Generation remains blocked on the public API even if a reserved flag is changed.
 
 After deployment, `/api/health` should return `status: "ok"`, `savedExamples: 2`, and `capabilities.liveGeneration: false`. `credentialsSupplied: false` is expected for this saved-only deployment. Check both scene selections, evidence downloads, and the mobile layout. `POST /api/generate` must return HTTP 403.
+
+The [public deployment](https://cloudinary-product-studio.vercel.app/) was verified on October 25, 2026: both saved scenes load, desktop and mobile reviews work, the served image hashes match the manifest, and generation returns HTTP 403. No Cloudinary credentials are configured in Vercel. Pushes to this repository's `main` branch deploy through the connected Vercel project.
 
 Vercel supports Nuxt's server-rendered build with [framework defaults](https://vercel.com/docs/frameworks/full-stack/nuxt). Do not replace `pnpm build` with a static-only export or set the output directory to `.output/public`, because this project includes API routes.
 
