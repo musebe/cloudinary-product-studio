@@ -32,3 +32,20 @@ Testing exposed and fixed an SDK SSR interoperability issue (`@cloudinary/vue` a
 ### Remaining work
 
 Signed product ingestion and source readback; bounded live image editing and task polling; durable evidence/review storage; saved outputs from this app; measured product-specific findings. These are not implemented by the saved-demo checkpoint.
+
+## October 25, 2026: two approved saved generations
+
+The user explicitly approved generating and saving two examples for the public demo. The MCP connection points to a different Cloudinary environment, so the operator used this project's private credentials for `demo-article-projects` instead. No changes were made to the other environment.
+
+`scripts/generate-saved-demos.mjs` is a local-only authoring command with a durable two-request ledger and exclusive lock. It reserves each request before sending it, never retries generation automatically, resumes task polling without a new generation request, and refuses execution on deployed servers. It is not imported by any web route or build hook.
+
+| Scene           | Actual model           | Delivered size  | Image Generation credits | Persistence                                 |
+| --------------- | ---------------------- | --------------- | -----------------------: | ------------------------------------------- |
+| Quiet marble    | `flux-2-klein-9b-edit` | 1024 × 1024 PNG |                        3 | Managed Cloudinary asset plus packaged copy |
+| Botanical light | `flux-2-klein-9b-edit` | 1024 × 1024 PNG |                        3 | Managed Cloudinary asset plus packaged copy |
+
+The add-on reported 50 credits before this run and 44 remaining afterward. These are Image Generation add-on credits, not general media-delivery credits. Exactly two generation requests succeeded; no replacement or third image was requested. Both results were read back through the authenticated Admin API, downloaded without transformations, checked against the persisted dimensions/byte counts, and hashed. The resulting public evidence is in `shared/studio/saved-manifest.json`; the local ledger under `.data` is not committed.
+
+The images change the setting as requested, but product details still need human inspection. In particular, compare the dot pattern, handle shape, proportions, and surface finish; a reference image does not guarantee exact product identity. No visual pass score or approval was assigned automatically.
+
+An initial Node import-resolution error occurred before the script reached any provider operation. Explicit TypeScript import extensions fixed it. The two-request ledger was created only by the subsequent successful run.

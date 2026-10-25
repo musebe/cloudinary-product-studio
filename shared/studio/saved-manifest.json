@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "product-studio.saved.v1",
+  "recordedOn": "2026-10-25",
+  "source": {
+    "id": "cloudinary-docs-teapot-reference",
+    "cloudName": "demo",
+    "publicId": "docs/teapot-product",
+    "version": 1784151459,
+    "format": "jpg",
+    "localPath": "/demo/teapot-reference.jpg",
+    "width": 1920,
+    "height": 1314,
+    "bytes": 214441,
+    "sha256": "5a935e6fb0b12f3ba9c0a12f6b901a294a76c23dafba28c86a62f14d8301ee12",
+    "alt": "Product photograph of a white ceramic teapot with terracotta dots, lid, spout, and handle."
+  },
+  "outputs": [
+    {
+      "id": "product-studio-marble-509a2efdf9b26f00598ccd026be2724e",
+      "sceneId": "marble",
+      "name": "Quiet marble",
+      "cloudName": "demo-article-projects",
+      "publicId": "product-studio/689d2190-f5b0-40c7-bcff-cead4411c49c/marble",
+      "assetId": "509a2efdf9b26f00598ccd026be2724e",
+      "version": 1792930801,
+      "format": "png",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 1239670,
+      "sha256": "53246370cd0652573032a74a1b69f18e07ce4ecba371dccadc7f5934a7e3e13a",
+      "localPath": "/demo/generated/marble.png",
+      "alt": "AI-generated quiet marble scene featuring the reference white teapot with terracotta details.",
+      "generation": {
+        "operation": "image_to_image",
+        "modelRequested": "flux-2-klein-9b-edit",
+        "modelUsed": "flux-2-klein-9b-edit",
+        "prompt": "Edit the product in reference image [1]. Preserve its shape, color, handle, spout, finish, and small details. Place the same teapot on a pale marble counter against a warm off-white wall, with soft window daylight and a subtle contact shadow. Change only the setting; add no text or logos.",
+        "seedRequested": 104729,
+        "seedUsed": 104729,
+        "requestId": "c87d93a9b4fb13206bc54c80a3a6aa44",
+        "createdAt": "2026-10-25T12:20:02.656763321Z",
+        "referenceUrl": "https://res.cloudinary.com/demo/image/upload/v1784151459/docs/teapot-product.jpg"
+      },
+      "verification": {
+        "adminReadback": true,
+        "deliveryDownloaded": true,
+        "verifiedAt": "2026-10-25T12:20:05.730Z"
+      }
+    },
+    {
+      "id": "product-studio-botanical-b566e5cd71e882fe99ec132b1882eaf1",
+      "sceneId": "botanical",
+      "name": "Botanical light",
+      "cloudName": "demo-article-projects",
+      "publicId": "product-studio/689d2190-f5b0-40c7-bcff-cead4411c49c/botanical",
+      "assetId": "b566e5cd71e882fe99ec132b1882eaf1",
+      "version": 1792930810,
+      "format": "png",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 1296786,
+      "sha256": "cea1c7c92caf36993ecacd4d9b693049361420d29f021e3457e64be7f5e474fc",
+      "localPath": "/demo/generated/botanical.png",
+      "alt": "AI-generated botanical light scene featuring the reference white teapot with terracotta details.",
+      "generation": {
+        "operation": "image_to_image",
+        "modelRequested": "flux-2-klein-9b-edit",
+        "modelUsed": "flux-2-klein-9b-edit",
+        "prompt": "Edit the product in reference image [1]. Preserve its shape, color, handle, spout, finish, and small details. Place the same teapot on a light neutral table against a muted sage-green wall, with soft daylight and delicate leaf shadows in the background. Keep foliage behind the product without obscuring it. Change only the setting; add no text or logos.",
+        "seedRequested": 155921,
+        "seedUsed": 155921,
+        "requestId": "54aeedc7efed3fea8f6c93bfb685c846",
+        "createdAt": "2026-10-25T12:20:10.989570277Z",
+        "referenceUrl": "https://res.cloudinary.com/demo/image/upload/v1784151459/docs/teapot-product.jpg"
+      },
+      "verification": {
+        "adminReadback": true,
+        "deliveryDownloaded": true,
+        "verifiedAt": "2026-10-25T12:20:12.622Z"
+      }
+    }
+  ]
+}
